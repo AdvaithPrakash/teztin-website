@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teztin Website - README</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.6;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            color: #333;
+        }
+        h1, h2, h3 {
+            color: #2c3e50;
+        }
+        code {
+            background: #f8f9fa;
+            padding: 2px 4px;
+            border-radius: 3px;
+            font-family: 'Monaco', 'Menlo', monospace;
+        }
+        pre {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+        .highlight {
+            background: #fff3cd;
+            padding: 10px;
+            border-left: 4px solid #ffc107;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>Teztin Website</h1>
+    
+    <p>A modern, responsive website with glassmorphism design, featuring a functional contact form with database integration.</p>
+
+    <h2>Features</h2>
+    <ul>
+        <li>Glassmorphism Design - Beautiful glass-like UI elements</li>
+        <li>Parallax Background - Dynamic bubble animations on scroll</li>
+        <li>Contact Form - Fully functional with validation</li>
+        <li>Database Integration - PostgreSQL backend for data storage</li>
+        <li>Responsive Design - Works on all devices</li>
+        <li>Real-time Validation - Form validation with error feedback</li>
+    </ul>
+
+    <h2>Quick Start</h2>
+
+    <h3>Prerequisites</h3>
+    <ul>
+        <li>Node.js (v16 or higher)</li>
+        <li>PostgreSQL (v13 or higher)</li>
+    </ul>
+
+    <h3>Installation</h3>
+    <ol>
+        <li>Navigate to the project
+            <pre>cd teztin-website</pre>
+        </li>
+        <li>Install dependencies
+            <pre>npm install</pre>
+        </li>
+        <li>Set up environment
+            <pre>cp glassmorphism.env .env
+# Edit .env with your database credentials</pre>
+        </li>
+        <li>Set up database
+            <pre>createdb teztin_contacts</pre>
+        </li>
+        <li>Start the backend
+            <pre>npm start
+# Or for development: npm run dev</pre>
+        </li>
+        <li>Open the website
+            <pre># Open glassmorphism.html in your browser
+# Or serve with a local server
+python -m http.server 8000
+# Then visit: http://localhost:8000/glassmorphism.html</pre>
+        </li>
+    </ol>
+
+    <h2>Project Structure</h2>
+    <pre>teztin-website/
+├── glassmorphism.html          # Main website file
+├── glassmorphism-backend.js    # Backend server
+├── glassmorphism.env           # Environment template
+├── package.json                # Dependencies
+├── README.html                 # This file
+└── DATABASE_SETUP.html        # Database setup guide</pre>
+
+    <h2>How It Works</h2>
+
+    <h3>Frontend (glassmorphism.html)</h3>
+    <ul>
+        <li>Glassmorphism UI - Modern glass-like design elements</li>
+        <li>Parallax Effects - Background bubbles move on scroll</li>
+        <li>Form Validation - Real-time input validation</li>
+        <li>API Integration - Sends data to backend server</li>
+    </ul>
+
+    <h3>Backend (glassmorphism-backend.js)</h3>
+    <ul>
+        <li>Express Server - RESTful API endpoints</li>
+        <li>PostgreSQL - Database for storing contact submissions</li>
+        <li>CORS Support - Cross-origin requests enabled</li>
+        <li>Error Handling - Comprehensive error management</li>
+    </ul>
+
+    <h2>Database Access</h2>
+
+    <h3>View All Contacts</h3>
+    <pre># API endpoint
+curl http://localhost:3001/api/contacts
+
+# Or visit in browser
+http://localhost:3001/api/contacts</pre>
+
+    <h3>Direct Database Access</h3>
+    <pre># Connect to database
+psql -U postgres -d teztin_contacts
+
+# View contacts
+SELECT * FROM contacts ORDER BY created_at DESC;</pre>
+
+    <h2>Configuration</h2>
+
+    <h3>Environment Variables (.env)</h3>
+    <pre>DB_HOST=localhost
+DB_PORT=5432
+DB_NAME=teztin_contacts
+DB_USER=postgres
+DB_PASSWORD=your_password
+PORT=3001</pre>
+
+    <h3>Database Schema</h3>
+    <pre>CREATE TABLE contacts (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    email VARCHAR(255) NOT NULL,
+    company VARCHAR(255),
+    description TEXT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);</pre>
+
+    <h2>Design Features</h2>
+
+    <h3>Glassmorphism Elements</h3>
+    <ul>
+        <li>Backdrop blur effects</li>
+        <li>Semi-transparent backgrounds</li>
+        <li>Subtle borders and shadows</li>
+        <li>Smooth animations</li>
+    </ul>
+
+    <h3>Interactive Elements</h3>
+    <ul>
+        <li>Hover effects on buttons and cards</li>
+        <li>Smooth scrolling navigation</li>
+        <li>Form validation with visual feedback</li>
+        <li>Success messages with data display</li>
+    </ul>
+
+    <h3>Responsive Design</h3>
+    <ul>
+        <li>Mobile-first approach</li>
+        <li>Flexible layouts for all screen sizes</li>
+        <li>Touch-friendly interactions</li>
+        <li>Optimized for all devices</li>
+    </ul>
+
+    <h2>Development</h2>
+
+    <h3>Available Scripts</h3>
+    <pre>npm start          # Start production server
+npm run dev        # Start development server with auto-reload
+npm run setup      # Install dependencies and copy env file</pre>
+
+    <h3>API Endpoints</h3>
+    <ul>
+        <li>POST /api/contact - Submit contact form</li>
+        <li>GET /api/contacts - Get all contacts</li>
+        <li>GET /api/health - Health check</li>
+    </ul>
+
+    <h2>Deployment</h2>
+
+    <h3>Local Development</h3>
+    <pre>npm run dev
+# Backend runs on http://localhost:3001
+# Frontend: Open glassmorphism.html in browser</pre>
+
+    <h3>Production</h3>
+    <pre>npm start
+# Backend runs on configured PORT
+# Deploy glassmorphism.html to web server</pre>
+
+    <h2>Support</h2>
+
+    <p>For issues or questions:</p>
+    <ul>
+        <li>Database setup: See DATABASE_SETUP.html</li>
+        <li>Backend issues: Check console logs</li>
+        <li>Form issues: Check browser console (F12)</li>
+        <li>Styling issues: Verify CSS classes and Tailwind</li>
+    </ul>
+
+    <div class="highlight">
+        <p><strong>Teztin</strong> - Transforming ideas into beautiful, functional websites with modern design and robust backend integration.</p>
+    </div>
+</body>
+</html> 

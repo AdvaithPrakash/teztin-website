@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teztin Database Setup Guide</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.6;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            color: #333;
+        }
+        h1, h2, h3 {
+            color: #2c3e50;
+        }
+        code {
+            background: #f8f9fa;
+            padding: 2px 4px;
+            border-radius: 3px;
+            font-family: 'Monaco', 'Menlo', monospace;
+        }
+        pre {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+        .warning {
+            background: #fff3cd;
+            padding: 10px;
+            border-left: 4px solid #ffc107;
+            margin: 10px 0;
+        }
+        .info {
+            background: #d1ecf1;
+            padding: 10px;
+            border-left: 4px solid #17a2b8;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>Teztin Database Setup Guide</h1>
+
+    <h2>How to Access Your Form Data</h2>
+
+    <h3>Current Status:</h3>
+    <ul>
+        <li>Form data is NOT currently stored in a database</li>
+        <li>Data is only logged to browser console and displayed temporarily</li>
+        <li>To store data permanently, you need to set up the backend</li>
+    </ul>
+
+    <h2>Option 1: Set Up Real Database (Recommended)</h2>
+
+    <h3>Step 1: Install PostgreSQL</h3>
+    <pre># macOS (using Homebrew)
+brew install postgresql
+brew services start postgresql
+
+# Windows
+# Download from: https://www.postgresql.org/download/windows/
+
+# Linux (Ubuntu/Debian)
+sudo apt update
+sudo apt install postgresql postgresql-contrib
+sudo systemctl start postgresql</pre>
+
+    <h3>Step 2: Create Database</h3>
+    <pre># Connect to PostgreSQL
+psql -U postgres
+
+# Create database
+CREATE DATABASE teztin_contacts;
+
+# Exit PostgreSQL
+\q</pre>
+
+    <h3>Step 3: Set Up Backend</h3>
+    <pre># Install dependencies
+npm install express pg cors dotenv
+
+# Copy environment file
+cp glassmorphism.env .env
+
+# Edit .env with your database credentials
+# Update DB_PASSWORD with your actual PostgreSQL password</pre>
+
+    <h3>Step 4: Start Backend Server</h3>
+    <pre># Start the backend
+node glassmorphism-backend.js
+
+# You should see: 🚀 Teztin backend running on port 3001
+# And: ✅ Contacts table ready</pre>
+
+    <h3>Step 5: Test the Setup</h3>
+    <ol>
+        <li>Open glassmorphism.html in your browser</li>
+        <li>Fill out and submit the contact form</li>
+        <li>Check the success message - it should show "Data Saved to Database"</li>
+        <li>View all contacts: http://localhost:3001/api/contacts</li>
+    </ol>
+
+    <h2>How to Access Your Data</h2>
+
+    <h3>Method 1: API Endpoint</h3>
+    <pre># Get all contacts
+curl http://localhost:3001/api/contacts
+
+# Or visit in browser:
+http://localhost:3001/api/contacts</pre>
+
+    <h3>Method 2: Direct Database Access</h3>
+    <pre># Connect to PostgreSQL
+psql -U postgres -d teztin_contacts
+
+# View all contacts
+SELECT * FROM contacts ORDER BY created_at DESC;
+
+# View recent contacts
+SELECT name, email, company, created_at 
+FROM contacts 
+WHERE created_at > NOW() - INTERVAL '7 days';
+
+# Exit
+\q</pre>
+
+    <h3>Method 3: Database GUI Tools</h3>
+    <ul>
+        <li>pgAdmin (Free, official PostgreSQL tool)</li>
+        <li>DBeaver (Free, supports multiple databases)</li>
+        <li>TablePlus (Paid, beautiful interface)</li>
+    </ul>
+
+    <h2>Database Schema</h2>
+
+    <pre>CREATE TABLE contacts (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    email VARCHAR(255) NOT NULL,
+    company VARCHAR(255),
+    description TEXT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);</pre>
+
+    <h3>Sample Queries:</h3>
+    <pre>-- Get all contacts
+SELECT * FROM contacts ORDER BY created_at DESC;
+
+-- Get contacts from last 24 hours
+SELECT * FROM contacts WHERE created_at > NOW() - INTERVAL '24 hours';
+
+-- Count total contacts
+SELECT COUNT(*) FROM contacts;
+
+-- Get contacts by company
+SELECT * FROM contacts WHERE company IS NOT NULL;</pre>
+
+    <h2>Troubleshooting</h2>
+
+    <h3>Backend Won't Start:</h3>
+    <pre># Check if PostgreSQL is running
+brew services list | grep postgresql
+
+# Restart PostgreSQL
+brew services restart postgresql
+
+# Check connection
+psql -U postgres -d teztin_contacts -c "SELECT 1;"</pre>
+
+    <h3>Database Connection Error:</h3>
+    <pre># Check your .env file
+cat .env
+
+# Make sure password matches your PostgreSQL password
+# Default password might be empty or 'postgres'</pre>
+
+    <h3>CORS Error:</h3>
+    <ul>
+        <li>Make sure the backend is running on port 3001</li>
+        <li>Check that CORS is properly configured in the backend</li>
+    </ul>
+
+    <h2>Alternative: No Database Setup</h2>
+
+    <p>If you don't want to set up a database, the form will still work and show you the data locally:</p>
+    <ol>
+        <li>Browser Console - Press F12 → Console to see logged data</li>
+        <li>Page Display - Data shows on the page for 8 seconds</li>
+        <li>No permanent storage - Data disappears when you refresh</li>
+    </ol>
+
+    <h2>Quick Start (5 minutes)</h2>
+    <ol>
+        <li>Install PostgreSQL (if not already installed)</li>
+        <li>Create database: createdb teztin_contacts</li>
+        <li>Install dependencies: npm install</li>
+        <li>Start backend: node glassmorphism-backend.js</li>
+        <li>Test form - Submit the contact form on your website</li>
+        <li>View data: Visit http://localhost:3001/api/contacts</li>
+    </ol>
+
+    <h2>Need Help?</h2>
+    <ul>
+        <li>Database issues: Check PostgreSQL installation and credentials</li>
+        <li>Backend issues: Make sure all dependencies are installed</li>
+        <li>Form issues: Check browser console for error messages</li>
+        <li>CORS issues: Ensure backend is running on correct port</li>
+    </ul>
+
+    <div class="info">
+        <p>Your form data will be permanently stored and accessible via the API endpoint!</p>
+    </div>
+</body>
+</html> 

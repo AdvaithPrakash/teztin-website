@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How to Store "I'm Interested" Form Data</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.6;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            color: #333;
+        }
+        h1, h2, h3 {
+            color: #2c3e50;
+        }
+        code {
+            background: #f8f9fa;
+            padding: 2px 4px;
+            border-radius: 3px;
+            font-family: 'Monaco', 'Menlo', monospace;
+        }
+        pre {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+        .step {
+            background: #e8f5e8;
+            padding: 15px;
+            border-left: 4px solid #28a745;
+            margin: 15px 0;
+        }
+        .warning {
+            background: #fff3cd;
+            padding: 10px;
+            border-left: 4px solid #ffc107;
+            margin: 10px 0;
+        }
+        .success {
+            background: #d4edda;
+            padding: 10px;
+            border-left: 4px solid #28a745;
+            margin: 10px 0;
+        }
+        .info {
+            background: #d1ecf1;
+            padding: 10px;
+            border-left: 4px solid #17a2b8;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>How to Store "I'm Interested" Form Data</h1>
+
+    <p>This guide walks you through setting up the database to store contact form submissions from your Teztin website.</p>
+
+    <h2>Current Status</h2>
+    <div class="warning">
+        <p><strong>Right now:</strong> Form data is only displayed temporarily and logged to browser console. It's NOT being stored permanently.</p>
+    </div>
+
+    <h2>Step-by-Step Setup</h2>
+
+    <div class="step">
+        <h3>Step 1: Install PostgreSQL</h3>
+        <p>First, you need PostgreSQL installed on your computer.</p>
+        
+        <h4>macOS:</h4>
+        <pre>brew install postgresql
+brew services start postgresql</pre>
+        
+        <h4>Windows:</h4>
+        <p>Download from: <a href="https://www.postgresql.org/download/windows/">https://www.postgresql.org/download/windows/</a></p>
+        
+        <h4>Linux:</h4>
+        <pre>sudo apt update
+sudo apt install postgresql postgresql-contrib
+sudo systemctl start postgresql</pre>
+    </div>
+
+    <div class="step">
+        <h3>Step 2: Create Database</h3>
+        <p>Create a database to store your contact form data.</p>
+        
+        <pre># Connect to PostgreSQL
+psql -U postgres
+
+# Create the database
+CREATE DATABASE teztin_contacts;
+
+# Exit PostgreSQL
+\q</pre>
+        
+        <p><strong>Note:</strong> If you get a password prompt, try pressing Enter (empty password) or use 'postgres' as the password.</p>
+    </div>
+
+    <div class="step">
+        <h3>Step 3: Navigate to Your Project</h3>
+        <pre>cd teztin-website</pre>
+    </div>
+
+    <div class="step">
+        <h3>Step 4: Install Dependencies</h3>
+        <pre>npm install</pre>
+        
+        <p>This installs all the required packages (Express, PostgreSQL driver, etc.)</p>
+    </div>
+
+    <div class="step">
+        <h3>Step 5: Set Up Environment Variables</h3>
+        <pre># Copy the environment template
+cp glassmorphism.env .env
+
+# Edit the .env file with your database password
+# Open .env in a text editor and update DB_PASSWORD</pre>
+        
+        <p><strong>Important:</strong> Replace 'your_password' with your actual PostgreSQL password. If you haven't set a password, leave it empty.</p>
+    </div>
+
+    <div class="step">
+        <h3>Step 6: Start the Backend Server</h3>
+        <pre>node glassmorphism-backend.js</pre>
+        
+        <p>You should see:</p>
+        <pre>🚀 Teztin backend running on port 3001
+✅ Contacts table ready</pre>
+    </div>
+
+    <div class="step">
+        <h3>Step 7: Test the Form</h3>
+        <ol>
+            <li>Open <code>glassmorphism.html</code> in your browser</li>
+            <li>Fill out the contact form</li>
+            <li>Click "Send Message"</li>
+            <li>Check the success message - it should say "Data Saved to Database"</li>
+        </ol>
+    </div>
+
+    <h2>How to Access Your Stored Data</h2>
+
+    <h3>Method 1: API Endpoint (Easiest)</h3>
+    <p>Visit this URL in your browser to see all form submissions:</p>
+    <pre>http://localhost:3001/api/contacts</pre>
+
+    <h3>Method 2: Command Line</h3>
+    <pre># Get all contacts via API
+curl http://localhost:3001/api/contacts
+
+# Or connect directly to database
+psql -U postgres -d teztin_contacts
+
+# View all contacts
+SELECT * FROM contacts ORDER BY created_at DESC;
+
+# Exit database
+\q</pre>
+
+    <h3>Method 3: Database GUI Tool</h3>
+    <p>Use a visual database tool like:</p>
+    <ul>
+        <li><strong>pgAdmin</strong> (Free, official PostgreSQL tool)</li>
+        <li><strong>DBeaver</strong> (Free, supports multiple databases)</li>
+        <li><strong>TablePlus</strong> (Paid, beautiful interface)</li>
+    </ul>
+
+    <h2>What Data Gets Stored</h2>
+
+    <p>When someone submits the "I'm Interested" form, this information is saved:</p>
+    <ul>
+        <li><strong>Name</strong> (required)</li>
+        <li><strong>Email</strong> (required)</li>
+        <li><strong>Company</strong> (optional)</li>
+        <li><strong>Project Description</strong> (required)</li>
+        <li><strong>Submission Time</strong> (automatically added)</li>
+        <li><strong>Unique ID</strong> (automatically generated)</li>
+    </ul>
+
+    <h2>Troubleshooting</h2>
+
+    <h3>Backend Won't Start</h3>
+    <pre># Check if PostgreSQL is running
+brew services list | grep postgresql
+
+# Restart PostgreSQL
+brew services restart postgresql
+
+# Test database connection
+psql -U postgres -d teztin_contacts -c "SELECT 1;"</pre>
+
+    <h3>Database Connection Error</h3>
+    <pre># Check your .env file
+cat .env
+
+# Make sure DB_PASSWORD matches your PostgreSQL password
+# Try empty password or 'postgres' if you haven't set one</pre>
+
+    <h3>Form Still Shows "Backend Not Available"</h3>
+    <ul>
+        <li>Make sure the backend is running (you should see the startup message)</li>
+        <li>Check that it's running on port 3001</li>
+        <li>Try refreshing the webpage</li>
+        <li>Check browser console (F12) for error messages</li>
+    </ul>
+
+    <h2>Sample Database Queries</h2>
+
+    <h3>View All Contacts</h3>
+    <pre>SELECT * FROM contacts ORDER BY created_at DESC;</pre>
+
+    <h3>View Recent Submissions (Last 24 Hours)</h3>
+    <pre>SELECT * FROM contacts 
+WHERE created_at > NOW() - INTERVAL '24 hours';</pre>
+
+    <h3>Count Total Submissions</h3>
+    <pre>SELECT COUNT(*) FROM contacts;</pre>
+
+    <h3>View Contacts with Company Names</h3>
+    <pre>SELECT * FROM contacts 
+WHERE company IS NOT NULL;</pre>
+
+    <h2>Quick Test</h2>
+
+    <div class="success">
+        <p><strong>To test if everything is working:</strong></p>
+        <ol>
+            <li>Start the backend: <code>node glassmorphism-backend.js</code></li>
+            <li>Open the website: <code>glassmorphism.html</code></li>
+            <li>Submit the form with test data</li>
+            <li>Check: <code>http://localhost:3001/api/contacts</code></li>
+            <li>You should see your test submission in the list!</li>
+        </ol>
+    </div>
+
+    <h2>Next Steps</h2>
+
+    <div class="info">
+        <p><strong>Once set up, you can:</strong></p>
+        <ul>
+            <li>View all form submissions in real-time</li>
+            <li>Export data to CSV or other formats</li>
+            <li>Set up email notifications for new submissions</li>
+            <li>Integrate with CRM systems</li>
+            <li>Add admin dashboard for managing contacts</li>
+        </ul>
+    </div>
+
+    <h2>Need Help?</h2>
+
+    <p>If you encounter issues:</p>
+    <ul>
+        <li>Check that PostgreSQL is installed and running</li>
+        <li>Verify your database password in the .env file</li>
+        <li>Make sure the backend is running on port 3001</li>
+        <li>Check browser console (F12) for error messages</li>
+        <li>Try the troubleshooting steps above</li>
+    </ul>
+
+    <div class="success">
+        <p><strong>Success!</strong> Once you complete these steps, every "I'm Interested" form submission will be permanently stored in your PostgreSQL database and accessible through the API endpoint.</p>
+    </div>
+</body>
+</html> 
