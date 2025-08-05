@@ -16,22 +16,38 @@ app.use(express.static('public'));
 // Database connection
 let pool;
 
-if (process.env.PG_URL) {
-    // Railway PostgreSQL connection
-    pool = new Pool({
-        connectionString: process.env.PG_URL,
-        ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : false
+try {
+    if (process.env.PG_URL) {
+        // Railway PostgreSQL connection
+        console.log('Connecting to Railway PostgreSQL...');
+        pool = new Pool({
+            connectionString: process.env.PG_URL,
+            ssl: { rejectUnauthorized: false }
+        });
+    } else {
+        // Local development connection
+        console.log('Connecting to local PostgreSQL...');
+        pool = new Pool({
+            host: process.env.DB_HOST || 'localhost',
+            port: process.env.DB_PORT || 5432,
+            database: process.env.DB_NAME || 'teztin_contacts',
+            user: process.env.DB_USER || 'postgres',
+            password: process.env.DB_PASSWORD || '',
+            ssl: false
+        });
+    }
+    
+    // Test the connection
+    pool.query('SELECT NOW()', (err, result) => {
+        if (err) {
+            console.error('Database connection failed:', err.message);
+        } else {
+            console.log('Database connected successfully');
+        }
     });
-} else {
-    // Local development connection
-    pool = new Pool({
-        host: process.env.DB_HOST || 'localhost',
-        port: process.env.DB_PORT || 5432,
-        database: process.env.DB_NAME || 'teztin_contacts',
-        user: process.env.DB_USER || 'advaith',
-        password: process.env.DB_PASSWORD || '',
-        ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : false
-    });
+    
+} catch (error) {
+    console.error('Error setting up database connection:', error);
 }
 
 // Create contacts table if it doesn't exist
@@ -70,6 +86,14 @@ app.get('/health', (req, res) => {
 // API Routes
 app.post('/api/contact', async (req, res) => {
     try {
+        // Check if database is connected
+        if (!pool) {
+            console.error('Database pool not initialized');
+            return res.status(500).json({ 
+                error: 'Database connection not available' 
+            });
+        }
+        
         const { name, email, company, description } = req.body;
         
         // Validate required fields
@@ -78,6 +102,9 @@ app.post('/api/contact', async (req, res) => {
                 error: 'Name, email, and description are required' 
             });
         }
+        
+        // Test database connection before inserting
+        await pool.query('SELECT 1');
         
         // Insert into database
         const result = await pool.query(`
@@ -102,9 +129,21 @@ app.post('/api/contact', async (req, res) => {
         
     } catch (error) {
         console.error('Error saving contact:', error);
-        res.status(500).json({ 
-            error: 'Failed to save contact' 
-        });
+        
+        // Provide more specific error messages
+        if (error.code === 'ECONNREFUSED') {
+            res.status(500).json({ 
+                error: 'Database connection failed. Please try again later.' 
+            });
+        } else if (error.code === '42P01') {
+            res.status(500).json({ 
+                error: 'Database table not found. Please contact administrator.' 
+            });
+        } else {
+            res.status(500).json({ 
+                error: 'Failed to save contact. Please try again.' 
+            });
+        }
     }
 });
 
@@ -751,6 +790,14 @@ app.get('/dashboard', async (req, res) => {
 // Health check
 app.get('/api/health', async (req, res) => {
     try {
+        if (!pool) {
+            return res.status(500).json({
+                status: 'unhealthy',
+                error: 'Database pool not initialized',
+                timestamp: new Date().toISOString()
+            });
+        }
+        
         await pool.query('SELECT 1');
         res.json({ 
             status: 'healthy', 
@@ -758,9 +805,11 @@ app.get('/api/health', async (req, res) => {
             timestamp: new Date().toISOString()
         });
     } catch (error) {
+        console.error('Health check failed:', error);
         res.status(500).json({
             status: 'unhealthy',
-            error: error.message
+            error: error.message,
+            timestamp: new Date().toISOString()
         });
     }
 });
