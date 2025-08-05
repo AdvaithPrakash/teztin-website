@@ -5,7 +5,8 @@
   "main": "glassmorphism-backend.js",
   "scripts": {
     "start": "node glassmorphism-backend.js",
-    "dev": "nodemon glassmorphism-backend.js"
+    "dev": "nodemon glassmorphism-backend.js",
+    "build": "echo 'No build step required'"
   },
   "dependencies": {
     "express": "^4.18.2",
