@@ -817,5 +817,7 @@ app.get('/api/health', async (req, res) => {
 const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {
     console.log(`Teztin backend running on port ${PORT}`);
+    console.log(`Environment: ${process.env.NODE_ENV || 'development'}`);
+    console.log(`Database URL: ${process.env.PG_URL ? 'Set' : 'Not set'}`);
     createContactsTable();
 }); 
