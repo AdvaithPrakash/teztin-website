@@ -4,7 +4,7 @@
   "description": "Teztin contact form system with database",
   "main": "glassmorphism-backend.js",
   "scripts": {
-    "start": "node glassmorphism-backend.js",
+    "start": "node simple-backend.js",
     "dev": "nodemon glassmorphism-backend.js",
     "build": "echo 'No build step required'"
   },
