@@ -50,6 +50,20 @@ async function createContactsTable() {
     }
 }
 
+// Root route - serve the main website
+app.get('/', (req, res) => {
+    res.sendFile(__dirname + '/glassmorphism.html');
+});
+
+// Health check route
+app.get('/health', (req, res) => {
+    res.json({ 
+        status: 'healthy', 
+        message: 'Teztin contact system is running',
+        timestamp: new Date().toISOString()
+    });
+});
+
 // API Routes
 app.post('/api/contact', async (req, res) => {
     try {
