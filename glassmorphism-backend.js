@@ -11,14 +11,25 @@ app.use(express.json());
 app.use(express.static('public'));
 
 // Database connection
-const pool = new Pool({
-    host: process.env.DB_HOST || 'localhost',
-    port: process.env.DB_PORT || 5432,
-    database: process.env.DB_NAME || 'teztin_contacts',
-    user: process.env.DB_USER || 'advaith',
-    password: process.env.DB_PASSWORD || '',
-    ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : false
-});
+let pool;
+
+if (process.env.PG_URL) {
+    // Railway PostgreSQL connection
+    pool = new Pool({
+        connectionString: process.env.PG_URL,
+        ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : false
+    });
+} else {
+    // Local development connection
+    pool = new Pool({
+        host: process.env.DB_HOST || 'localhost',
+        port: process.env.DB_PORT || 5432,
+        database: process.env.DB_NAME || 'teztin_contacts',
+        user: process.env.DB_USER || 'advaith',
+        password: process.env.DB_PASSWORD || '',
+        ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : false
+    });
+}
 
 // Create contacts table if it doesn't exist
 async function createContactsTable() {
