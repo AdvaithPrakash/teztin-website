@@ -84,6 +84,73 @@
         .parallax-bubble {
             transition: transform 0.1s ease-out;
         }
+        .bubble-small {
+            width: 60px;
+            height: 60px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            position: absolute;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .bubble-medium {
+            width: 100px;
+            height: 100px;
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 50%;
+            position: absolute;
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+        }
+        .bubble-large {
+            width: 150px;
+            height: 150px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 50%;
+            position: absolute;
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .bubble-glow {
+            box-shadow: 0 0 30px rgba(255, 255, 255, 0.1);
+        }
+        .floating-slow {
+            animation: float 8s ease-in-out infinite;
+        }
+        .floating-medium {
+            animation: float 6s ease-in-out infinite;
+        }
+        .floating-fast {
+            animation: float 4s ease-in-out infinite;
+        }
+        .animation-delay-1000 {
+            animation-delay: 1s;
+        }
+        .animation-delay-1500 {
+            animation-delay: 1.5s;
+        }
+        .animation-delay-2000 {
+            animation-delay: 2s;
+        }
+        .animation-delay-2500 {
+            animation-delay: 2.5s;
+        }
+        .animation-delay-3000 {
+            animation-delay: 3s;
+        }
+        .animation-delay-4000 {
+            animation-delay: 4s;
+        }
+        .animation-delay-5000 {
+            animation-delay: 5s;
+        }
+        .bubble-pulse {
+            animation: pulse 3s ease-in-out infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 0.4; }
+            50% { opacity: 0.8; }
+        }
         .data-display {
             background: rgba(0, 0, 0, 0.8);
             backdrop-filter: blur(20px);
@@ -103,9 +170,14 @@
 <body class="font-poppins text-white smooth-scroll bg-gradient-to-br from-indigo-900 via-purple-900 to-pink-900 min-h-screen">
     <!-- Background Elements with Parallax -->
     <div class="fixed inset-0 overflow-hidden pointer-events-none">
-        <div id="bubble1" class="absolute -top-40 -right-40 w-80 h-80 bg-purple-500 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-pulse parallax-bubble"></div>
-        <div id="bubble2" class="absolute -bottom-40 -left-40 w-80 h-80 bg-pink-500 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-pulse animation-delay-2000 parallax-bubble"></div>
-        <div id="bubble3" class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-80 h-80 bg-indigo-500 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-pulse animation-delay-4000 parallax-bubble"></div>
+        <div id="bubble1" class="absolute -top-40 -right-40 w-80 h-80 bg-purple-500 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-pulse parallax-bubble bubble-glow"></div>
+        <div id="bubble2" class="absolute -bottom-40 -left-40 w-80 h-80 bg-pink-500 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-pulse animation-delay-2000 parallax-bubble bubble-glow"></div>
+        <div id="bubble3" class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-80 h-80 bg-indigo-500 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-pulse animation-delay-4000 parallax-bubble bubble-glow"></div>
+        <div id="bubble4" class="absolute top-1/4 left-1/4 w-60 h-60 bg-blue-400 rounded-full mix-blend-multiply filter blur-lg opacity-50 animate-pulse animation-delay-1000 parallax-bubble floating-slow"></div>
+        <div id="bubble5" class="absolute bottom-1/4 right-1/4 w-40 h-40 bg-cyan-400 rounded-full mix-blend-multiply filter blur-md opacity-60 animate-pulse animation-delay-3000 parallax-bubble floating-medium"></div>
+        <div id="bubble6" class="absolute top-3/4 left-1/3 w-100 h-100 bg-violet-400 rounded-full mix-blend-multiply filter blur-xl opacity-40 animate-pulse animation-delay-5000 parallax-bubble floating-fast"></div>
+        <div id="bubble7" class="absolute top-1/6 right-1/3 w-50 h-50 bg-emerald-400 rounded-full mix-blend-multiply filter blur-sm opacity-70 animate-pulse animation-delay-1500 parallax-bubble floating-slow"></div>
+        <div id="bubble8" class="absolute bottom-1/6 left-1/2 w-70 h-70 bg-rose-400 rounded-full mix-blend-multiply filter blur-lg opacity-50 animate-pulse animation-delay-2500 parallax-bubble floating-medium"></div>
     </div>
 
     <!-- Navigation -->
@@ -164,6 +236,14 @@
 
     <!-- Services Section -->
     <section id="services" class="py-24 relative">
+        <!-- Additional bubbles for services section -->
+        <div class="absolute inset-0 overflow-hidden pointer-events-none">
+            <div id="service-bubble1" class="absolute top-1/4 left-1/6 w-32 h-32 bg-gradient-to-r from-blue-400 to-cyan-400 rounded-full mix-blend-multiply filter blur-lg opacity-40 animate-pulse animation-delay-1000 parallax-bubble floating-slow"></div>
+            <div id="service-bubble2" class="absolute top-1/2 right-1/8 w-24 h-24 bg-gradient-to-r from-purple-400 to-pink-400 rounded-full mix-blend-multiply filter blur-md opacity-50 animate-pulse animation-delay-2000 parallax-bubble floating-medium"></div>
+            <div id="service-bubble3" class="absolute bottom-1/4 left-1/3 w-40 h-40 bg-gradient-to-r from-indigo-400 to-violet-400 rounded-full mix-blend-multiply filter blur-xl opacity-30 animate-pulse animation-delay-3000 parallax-bubble floating-fast"></div>
+            <div id="service-bubble4" class="absolute top-3/4 right-1/4 w-28 h-28 bg-gradient-to-r from-emerald-400 to-teal-400 rounded-full mix-blend-multiply filter blur-sm opacity-60 animate-pulse animation-delay-1500 parallax-bubble floating-slow"></div>
+            <div id="service-bubble5" class="absolute bottom-1/6 right-1/6 w-36 h-36 bg-gradient-to-r from-rose-400 to-pink-400 rounded-full mix-blend-multiply filter blur-lg opacity-45 animate-pulse animation-delay-2500 parallax-bubble floating-medium"></div>
+        </div>
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-20">
                 <div class="glass-card p-8 rounded-2xl inline-block">
@@ -288,14 +368,37 @@
             const scrolled = window.pageYOffset;
             const rate = scrolled * -1.2; // Increased from -0.5 to -1.2
             
-            // Update bubble positions based on scroll with more dramatic movement
+            // Update main bubble positions based on scroll with more dramatic movement
             const bubble1 = document.getElementById('bubble1');
             const bubble2 = document.getElementById('bubble2');
             const bubble3 = document.getElementById('bubble3');
+            const bubble4 = document.getElementById('bubble4');
+            const bubble5 = document.getElementById('bubble5');
+            const bubble6 = document.getElementById('bubble6');
+            const bubble7 = document.getElementById('bubble7');
+            const bubble8 = document.getElementById('bubble8');
             
-            if (bubble1) bubble1.style.transform = `translateY(${rate * 0.6}px) translateX(${rate * 0.1}px)`; // Added X movement
-            if (bubble2) bubble2.style.transform = `translateY(${rate * 0.8}px) translateX(${rate * -0.15}px)`; // Increased Y, added X
-            if (bubble3) bubble3.style.transform = `translateY(${rate * 0.4}px) translateX(${rate * 0.2}px)`; // Added X movement
+            if (bubble1) bubble1.style.transform = `translateY(${rate * 0.6}px) translateX(${rate * 0.1}px)`;
+            if (bubble2) bubble2.style.transform = `translateY(${rate * 0.8}px) translateX(${rate * -0.15}px)`;
+            if (bubble3) bubble3.style.transform = `translateY(${rate * 0.4}px) translateX(${rate * 0.2}px)`;
+            if (bubble4) bubble4.style.transform = `translateY(${rate * 0.7}px) translateX(${rate * -0.1}px)`;
+            if (bubble5) bubble5.style.transform = `translateY(${rate * 0.5}px) translateX(${rate * 0.15}px)`;
+            if (bubble6) bubble6.style.transform = `translateY(${rate * 0.9}px) translateX(${rate * -0.2}px)`;
+            if (bubble7) bubble7.style.transform = `translateY(${rate * 0.3}px) translateX(${rate * 0.25}px)`;
+            if (bubble8) bubble8.style.transform = `translateY(${rate * 0.6}px) translateX(${rate * -0.05}px)`;
+            
+            // Update service section bubbles with different movement patterns
+            const serviceBubble1 = document.getElementById('service-bubble1');
+            const serviceBubble2 = document.getElementById('service-bubble2');
+            const serviceBubble3 = document.getElementById('service-bubble3');
+            const serviceBubble4 = document.getElementById('service-bubble4');
+            const serviceBubble5 = document.getElementById('service-bubble5');
+            
+            if (serviceBubble1) serviceBubble1.style.transform = `translateY(${rate * 0.4}px) translateX(${rate * 0.3}px)`;
+            if (serviceBubble2) serviceBubble2.style.transform = `translateY(${rate * 0.6}px) translateX(${rate * -0.2}px)`;
+            if (serviceBubble3) serviceBubble3.style.transform = `translateY(${rate * 0.8}px) translateX(${rate * 0.1}px)`;
+            if (serviceBubble4) serviceBubble4.style.transform = `translateY(${rate * 0.5}px) translateX(${rate * -0.25}px)`;
+            if (serviceBubble5) serviceBubble5.style.transform = `translateY(${rate * 0.7}px) translateX(${rate * 0.2}px)`;
         }
 
         // Smooth scrolling function
